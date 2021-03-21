@@ -7,39 +7,12 @@
     </div>
     <div class="showtimes__table">
       <ul class="showtimes__list">
-        <li class="showtimes__list-item">
-          <div class="showtimes__item-time">12:00</div>
-          <div class="showtimes__item-title">Czarna wdowa</div>
+        <li class="showtimes__list-item" v-for="screening in screenings" :key="screening._id">
+          <div class="showtimes__item-time">{{ time(screening.date) }}</div>
+          <div class="showtimes__item-title">{{ screening.movie.title }}</div>
           <div class="showtimes__item-info">
-            Akcja/Sci-Fi - 138 min - USA
-          </div>
-        </li>
-        <li class="showtimes__list-item">
-          <div class="showtimes__item-time">14:00</div>
-          <div class="showtimes__item-title">Czarna wdowa</div>
-          <div class="showtimes__item-info">
-            Akcja/Sci-Fi - 138 min - USA
-          </div>
-        </li>
-        <li class="showtimes__list-item">
-          <div class="showtimes__item-time">17:00</div>
-          <div class="showtimes__item-title">Czarna wdowa</div>
-          <div class="showtimes__item-info">
-            Akcja/Sci-Fi - 138 min - USA
-          </div>
-        </li>
-        <li class="showtimes__list-item">
-          <div class="showtimes__item-time">19:00</div>
-          <div class="showtimes__item-title">Czarna wdowa</div>
-          <div class="showtimes__item-info">
-            Akcja/Sci-Fi - 138 min - USA
-          </div>
-        </li>
-        <li class="showtimes__list-item">
-          <div class="showtimes__item-time">21:00</div>
-          <div class="showtimes__item-title">Czarna wdowa</div>
-          <div class="showtimes__item-info">
-            Akcja/Sci-Fi - 138 min - USA
+            <template v-if="screening.movie.duration">{{ screening.movie.duration }} min - </template>
+            <template v-if="screening.movie.genre">{{ screening.movie.genre }}</template>
           </div>
         </li>
       </ul>
@@ -51,11 +24,27 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { inject, reactive, toRefs } from 'vue';
+
 export default {
   name: 'Showtimes',
   setup() {
-    
-  },
+    const state = reactive({
+      screenings: []
+    });
+
+    const time = date => {
+      const dateObj = new Date(date);
+      return `${dateObj.getHours() < 10 ? '0' : ''}${dateObj.getHours()}:${dateObj.getMinutes() < 10 ? '0' : ''}${dateObj.getMinutes()}`;
+    };
+
+    axios.get(`${inject('API_URL')}/next-screenings`).then(response => {
+      state.screenings = response.data;
+    });
+
+    return { ...toRefs(state), time };
+  }
 }
 </script>
 
@@ -97,6 +86,7 @@ export default {
     display: grid;
     grid-template:  "time title title"
                     "time info info";
+    grid-template-columns: min-content 1fr;
     margin: 15px 0;
   }
 
@@ -107,6 +97,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 30px;
   }
 
   &__item-title {

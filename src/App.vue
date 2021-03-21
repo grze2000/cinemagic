@@ -5,14 +5,20 @@
 
 <script>
 import Footer from '@/components/Footer.vue';
+import { provide } from 'vue';
 
 export default {
   components: {
     Footer
   },
   setup() {
-    
+    provide('API_URL', 'http://localhost:3000');
   },
+  watch: {
+    $route(to) {
+      document.title = to.meta.title || 'Cinemagic';
+    }
+  }
 }
 </script>
 
