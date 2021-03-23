@@ -3,38 +3,11 @@
     <div class="section__subtitle">Filmy</div>
     <h2 class="section__title"><strong>Aktualnie</strong> wyświetlane</h2>
     <div class="now-showing__list">
-      <div class="now-showing__list-item movie">
-        <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie__image">
-        <div class="movie__title">Czarna wdowa</div>
-        <div class="movie__info">138 min</div>
-        <div class="movie__info">Od 6 maja</div>
-        <router-link to="/get-ticket">
-          <button class="btn--small">Kup bilet</button>
-        </router-link>
-      </div>
-      <div class="now-showing__list-item movie">
-        <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie__image">
-        <div class="movie__title">Czarna wdowa</div>
-        <div class="movie__info">138 min</div>
-        <div class="movie__info">Od 6 maja</div>
-        <router-link to="/get-ticket">
-          <button class="btn--small">Kup bilet</button>
-        </router-link>
-      </div>
-      <div class="now-showing__list-item movie">
-        <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie__image">
-        <div class="movie__title">Czarna wdowa</div>
-        <div class="movie__info">138 min</div>
-        <div class="movie__info">Od 6 maja</div>
-        <router-link to="/get-ticket">
-          <button class="btn--small">Kup bilet</button>
-        </router-link>
-      </div>
-      <div class="now-showing__list-item movie">
-        <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie__image">
-        <div class="movie__title">Czarna wdowa</div>
-        <div class="movie__info">138 min</div>
-        <div class="movie__info">Od 6 maja</div>
+      <div class="now-showing__list-item movie" v-for="movie in movies" :key="movie._id">
+        <img :src="movie.poster" alt="" class="movie__image">
+        <div class="movie__title">{{ movie.title }}</div>
+        <div class="movie__info">{{ movie.duration ? `${movie.duration} min` : movie.genre }}</div>
+        <div class="movie__info">{{ releaseDate(movie.release) }}</div>
         <router-link to="/get-ticket">
           <button class="btn--small">Kup bilet</button>
         </router-link>
@@ -53,8 +26,20 @@
 <script>
 export default {
   name: 'NowShowing',
+  props: {
+    movies: {
+      type: Array,
+      default: () => []
+    }
+  },
   setup() {
-    
+    const months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+    const releaseDate = date => {
+      const dateObj = new Date(date);
+      return `od ${dateObj.getDate()} ${months[dateObj.getMonth()]}`;
+    }
+
+    return { releaseDate };
   },
 }
 </script>

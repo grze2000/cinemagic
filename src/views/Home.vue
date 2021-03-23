@@ -16,10 +16,10 @@
       <button class="btn">Kup bilet</button>
       <button class="btn">Cennik</button>
     </section>
-    <NowShowing></NowShowing>
-    <ComingSoon></ComingSoon>
+    <NowShowing :movies="movies"></NowShowing>
+    <ComingSoon :movie="comingSoonMovie"></ComingSoon>
     <Showtimes></Showtimes>
-    <MoviePass></MoviePass>
+    <MoviePass :movies="movies"></MoviePass>
   </main>
 </template>
 
@@ -29,6 +29,8 @@ import NowShowing from '@/components/NowShowing.vue';
 import ComingSoon from '@/components/ComingSoon.vue';
 import Showtimes from '@/components/Showtimes.vue';
 import MoviePass from '@/components/MoviePass.vue';
+import axios from 'axios';
+import { computed, inject, ref } from 'vue';
 
 export default {
   name: 'Home',
@@ -38,6 +40,18 @@ export default {
     ComingSoon,
     Showtimes,
     MoviePass
+  },
+  setup() {
+    const movies = ref([]);
+
+    axios.get(`${inject('API_URL')}/movies`).then(response => {
+      movies.value = response.data;
+      console.log(comingSoonMovie.value);
+    });
+
+    const comingSoonMovie = computed(() => movies.value.filter(movie => new Date(movie.release) > new Date())[0]);
+    
+    return { movies, comingSoonMovie };
   }
 }
 </script>

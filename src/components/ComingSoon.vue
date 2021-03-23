@@ -1,12 +1,12 @@
 <template>
-  <section class="section coming-soon">
+  <section class="section coming-soon" v-if="movie">
     <div class="coming-soon__image-wrapper">
-      <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="coming-soon__image">
+      <img :src="movie.poster" alt="" class="coming-soon__image">
     </div>
     <div class="coming-soon__movie-info">
       <div class="section__subtitle">Wkrótce</div>
-      <h2 class="section__title">Czarna wdowa</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, corporis officia! Quasi optio commodi quidem ipsam voluptas. Porro cum harum et, placeat, quasi, facere tempora incidunt ducimus veritatis ab odio?</p>
+      <h2 class="section__title">{{ movie.title }}</h2>
+      <p>{{ movie.description }}</p>
       <router-link to="/movie/123">
         <button class="btn--filled">Zobacz zwiastun</button>
       </router-link>
@@ -20,6 +20,7 @@
 <script>
 export default {
   name: 'ComingSoon',
+  props: ['movie'],
   setup() {
     
   },

@@ -7,17 +7,8 @@
         <button class="btn--filled">Sprawdź</button>
       </router-link>
     </div>
-    <div class="movie-pass__image-wrapper">
-      <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie-pass__image">
-    </div>
-    <div class="movie-pass__image-wrapper">
-      <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie-pass__image">
-    </div>
-    <div class="movie-pass__image-wrapper">
-      <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie-pass__image">
-    </div>
-    <div class="movie-pass__image-wrapper">
-      <img src="https://fwcdn.pl/fpo/66/50/836650/7926222.3.jpg" alt="" class="movie-pass__image">
+    <div class="movie-pass__image-wrapper" v-for="movie in movies.slice(0, 5)" :key="movie._id">
+      <img :src="movie.poster" alt="" class="movie-pass__image">
     </div>
   </section>
 </template>
@@ -25,9 +16,12 @@
 <script>
 export default {
   name: 'MoviePass',
-  setup() {
-    
-  },
+  props: {
+    movies: {
+      type: Array,
+      default: () => []
+    }
+  }
 }
 </script>
 
