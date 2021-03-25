@@ -14,9 +14,9 @@ export default {
 <style lang="scss">
 .footer {
   background-image: url('/img/footer.jpg');
-  background-position: center bottom;
+  background-position: center top;
   background-repeat: no-repeat;
   background-size: 100% auto;
-  min-height: 300px;
+  min-height: 350px;
 }
 </style>
