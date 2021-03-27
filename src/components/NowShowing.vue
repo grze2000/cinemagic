@@ -4,6 +4,8 @@
     <h2 class="section__title"><strong>Aktualnie</strong> wyświetlane</h2>
     <div class="now-showing__list">
       <div class="now-showing__list-item movie" v-for="movie in movies" :key="movie._id">
+        <span class="movie__ribbon--coming-soon" v-if="new Date(movie.release) > new Date()">Wkrótce</span>
+        <span class="movie__ribbon--premiere" v-if="isPremiere(movie.release)">Premiera</span>
         <img :src="movie.poster" alt="" class="movie__image">
         <div class="movie__title">{{ movie.title }}</div>
         <div class="movie__info">{{ movie.duration ? `${movie.duration} min` : movie.genre }}</div>
@@ -39,7 +41,14 @@ export default {
       return `od ${dateObj.getDate()} ${months[dateObj.getMonth()]}`;
     }
 
-    return { releaseDate };
+    const isPremiere = releaseDate => {
+      const release = new Date(releaseDate);
+      const date = new Date();
+      date.setDate(date.getDate() - 2);
+      return release > date && release < new Date();
+    }
+
+    return { releaseDate, isPremiere };
   },
 }
 </script>
@@ -60,6 +69,7 @@ export default {
   padding: 15px;
   border-radius: 3px;
   transition: background-color 0.2s;
+  position: relative;
 
   &:hover {
     background-color: $grey;
@@ -67,6 +77,7 @@ export default {
 
   &__image {
     width: 100%;
+    box-shadow: 0 0 15px 5px rgba(32,32,32,0.5);
   }
 
   &__title {
@@ -80,6 +91,63 @@ export default {
     &:last-of-type {
       margin-bottom: 15px;
     }
+  }
+
+  &__ribbon {
+    position: absolute;
+    top: 25px;
+    right: 8px;
+    box-shadow: -12px 0px 15px 5px rgba(32,32,32,0.5);
+    padding: 4px 10px 4px 0;
+    text-transform: uppercase;
+    line-height: 1em;
+    letter-spacing: 1px;
+    font-size: 11px;
+    font-weight: 600;
+    user-select: none;
+    
+    &::after, &::before {
+      position: absolute;
+      border-style: solid;
+      content: '';
+    }
+
+    &::before {
+      right: 0;
+      bottom: 100%;
+      border-width: 5px 0 0 7px;
+    }
+
+    &::after {
+      top: 0;
+      right: 100%;
+      border-width: calc(.5em + 4px) 8px calc(.5em + 4px) 8px;
+    }
+  }
+}
+
+.movie__ribbon--premiere {
+  @extend .movie__ribbon;
+  background-color: $primary-color;
+
+  &::before {
+    border-color: transparent transparent transparent darken($primary-color, 20%);
+  }
+
+  &::after {
+    border-color: $primary-color $primary-color $primary-color transparent;
+  }
+}
+.movie__ribbon--coming-soon {
+  @extend .movie__ribbon;
+  background-color: $secondary-color;
+
+  &::before {
+    border-color: transparent transparent transparent darken($secondary-color, 20%);
+  }
+
+  &::after {
+    border-color: $secondary-color $secondary-color $secondary-color transparent;
   }
 }
 

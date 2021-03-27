@@ -16,7 +16,7 @@ export default {
   background-image: url('/img/footer.jpg');
   background-position: center top;
   background-repeat: no-repeat;
-  background-size: 100% auto;
+  background-size: cover;
   min-height: 350px;
 }
 </style>
